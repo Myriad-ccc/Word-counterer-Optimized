@@ -1,13 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace WordCounterVisual
 {
@@ -22,17 +19,13 @@ namespace WordCounterVisual
         {
             string path = textBox1.Text;
 
-            var words = File.ReadAllText(path).
-                Split(new char[] { ',', ' ', '!', '.', ';', ':', '?', '#', '@' }, StringSplitOptions.RemoveEmptyEntries).
-                Where(x => !string.IsNullOrEmpty(x) && x.All(char.IsLetter)).
-                Select(x => x.ToLower());
-
-            var wordCount = words.GroupBy(word => word);
-
             Dictionary<string, int> wordFrequency =
-                words.
-                GroupBy(w => w).
-                ToDictionary(g => g.Key, g => g.Count());
+                File.ReadAllText(path).
+                Split().
+                Where(x => !string.IsNullOrEmpty(x) && x.All(char.IsLetter)).
+                Select(x => x.ToLower()).
+                GroupBy(word => word).
+                ToDictionary(group => group.Key, group => group.Count());
 
             int defaultWidth = -100;
             int width = defaultWidth, height = 200, index = 1;
@@ -56,7 +49,7 @@ namespace WordCounterVisual
                     width = defaultWidth;
                     height += 65;
                 }
-                index++;    
+                index++;
 
                 Controls.Add(newLabel);
             }
